@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <!-- 批量别名定义，扫描整个包下的类，别名为类名（首字母大写或小写都可以） -->
+        <package name="mybatis_spring.PO"  />
+    </typeAliases>
+
+    <mappers>
+        <!-- Dao接口开发，加载映射文件-->
+        <mapper resource="spring_mybatis/Forum.xml" />
+
+        <!-- mapper 接口开发  -->
+        <mapper resource="spring_mybatis/Mapper/ForumMapper.xml" />
+        <mapper resource="spring_mybatis/Mapper/PostMapper.xml"  />
+
+        <!-- 也可以批量加载
+        <package name="spring_mybatis.Mapper" />
+        -->
+
+    </mappers>
+
+</configuration>

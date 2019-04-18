@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 使用Mapper代理开发时，namespace等于mapper接口地址 -->
+<mapper namespace="mybatis_spring.Mapper.PostMapper">
+
+    <insert id="insertPost" parameterType="Post">
+        insert into t_post(forum_id,title,content,thumbnail)
+               values(#{forum_id},#{title},#{content},#{thumbnail})
+    </insert>
+
+    <delete id="delPost" parameterType="int">
+        delete from t_post where post_id=#{post_id}
+    </delete>
+
+    <select id="getPostsByForumIdAndTitle" parameterType="Post" resultType="Post">
+        select * from t_post
+        <where>
+            <choose>
+                <when test="forum_id!=null and forum_id!='' ">
+                    forum_id=#{forum_id}
+                </when>
+                <when test="title!=null and title!='' ">
+                    title=#{title}
+                </when>
+                <otherwise>
+                    and content is not null
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <select id="getPostsByTitleAndContent" parameterType="Post" resultType="Post">
+        select * from t_post
+        <trim prefix="where" prefixOverrides="and">
+            <if test="title !=null and title !='' ">
+                and title like concat('%',#{title},'%')
+            </if>
+            <if test="content !=null and content !='' ">
+                and content like concat('%',#{content},'%')
+            </if>
+        </trim>
+    </select>
+
+    <update id="updatePost" parameterType="Post">
+        update t_post
+        <set>
+            <if test="forum_id!=null and forum_id!='' ">
+                forum_id=#{forum_id}
+            </if>
+            <if test="title!=null and title!='' ">
+                title=#{title}
+            </if>
+            <if test="content!=null and content!='' ">
+                content=#{content}
+            </if>
+        </set>
+        where post_id=#{post_id}
+    </update>
+
+    <select id="getPostsByForumId" parameterType="int" resultType="Post">
+        select * from t_post where forum_id=#{forum_id}
+    </select>
+
+    <select id="getCountByForumId" parameterType="int">
+        select count(*) from t_post where forum_id=#{forum_id}
+    </select>
+
+    <select id="getPostsByPostIds" parameterType="List" resultType="Post">
+        select * from t_post where post_id in
+        <foreach collection="list" index="index" item="post_id" open="(" separator="," close=") ">
+            #{post_id}
+        </foreach>
+    </select>
+
+
+</mapper>

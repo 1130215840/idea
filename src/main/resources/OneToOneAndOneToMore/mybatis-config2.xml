@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <package name="OneToMore2" />
+        <package name="duoduiduo" />
+    </typeAliases>
+
+    <environments default="mysql">
+        <environment id="mysql">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
+                <property name="username" value="root"/>
+                <property name="password" value="961102"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--  配置Mapper的位置 -->
+    <mappers>
+        <mapper resource="OneToMore2/Mapper/CourseMapper.xml" />
+        <mapper resource="OneToMore2/Mapper/StudentMapper.xml" />
+
+        <mapper resource="duoduiduo/Mapper/ProductMapper.xml" />
+        <mapper resource="duoduiduo/Mapper/OrdersMapper.xml" />
+    </mappers>
+
+</configuration>

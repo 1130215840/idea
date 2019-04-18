@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <!-- 使用Mapper代理开发时，namespace等于mapper接口地址 -->
+<mapper namespace="mybatis_spring.Mapper.ForumMapper">
+
+    <insert id="insertForum" parameterType="Forum">
+        insert into t_forum(forum_name) values (#{forum_name})
+    </insert>
+
+    <delete id="deleteForumById" parameterType="int">
+        delete from t_forum where forum_id=#{forum_id}
+    </delete>
+
+    <update id="updateForum" parameterType="Forum">
+        update t_forum
+        <set>
+            <if test="forum_name!=null and forum_name!='' ">
+                forum_name=#{forum_name}
+            </if>
+        </set>
+        where forum_id=#{forum_id}
+    </update>
+
+    <select id="getAllForums" resultType="Forum">
+        select * from t_forum
+    </select>
+
+</mapper>

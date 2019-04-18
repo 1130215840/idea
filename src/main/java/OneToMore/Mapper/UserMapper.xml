@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OneToMore.Mapper.UserMapper.xml">
+    <!-- 嵌套结果 -->
+    <select id="findUserAndOrders" parameterType="int" resultMap="result">
+        select u.*,o.id as orders_id,o.number
+        from t_user u,t_orders o
+        where u.id=o.user_id and u.id=#{id}
+    </select>
+
+    <resultMap id="result" type="User" >
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="address" column="address" />
+
+        <collection property="ordersList" ofType="Orders" >
+            <id property="id" column="orders_id" />
+            <result property="number" column="number" />
+        </collection>
+    </resultMap>
+
+    <!-- 嵌套查询 -->
+    <select id="findUserById" parameterType="int" resultMap="UserWithIdResult">
+        select * from t_user where id=#{id}
+    </select>
+
+    <resultMap id="UserWithIdResult" type="User" >
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="address" column="address" />
+
+        <collection property="ordersList" column="id" ofType="Orders"
+                    select="OneToMore.Mapper.OrdersMapper.xml.selectOrders" />
+    </resultMap>
+
+</mapper>

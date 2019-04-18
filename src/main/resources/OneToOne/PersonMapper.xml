@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PersonMapper">
+    
+    <!-- 嵌套查询：通过执行另外一条sql映射语句来返回预期的特殊类型-->
+    <select id="findPersonByPid" parameterType="int" resultMap="IdCardWithPersonResult">
+        select * from t_person where p_id = #{p_id};
+    </select>
+
+    <resultMap id="IdCardWithPersonResult" type="OneToOne.Person">
+        <!--
+              id:指定查询列表唯一标识，如果有多个唯一标识，则配置多个id
+              column:数据库对应的列
+              property:实体类对应的属性名
+        -->
+        <id property="p_id" column="p_id" />
+        <result property="name" column="name" />
+        <result property="age" column="age" />
+        <result property="sex" column="sex" />
+
+        <!-- 一对一：association 使用select 属性引入另外一条sql语句 -->
+        <association property="card" column="card_id" javaType="OneToOne.IdCard"
+                     select="IdCardMapper.findCodeByCid"  />
+    </resultMap>
+
+    <!-- 嵌套结果 -->
+    <select id="findPersonByPid2" parameterType="int" resultMap="IdCardWithPersonResult2">
+       select p.*,idcard.code from t_person p,t_idcard idcard
+          where p.card_id=idcard.c_id and p.p_id=#{p_id}
+    </select>
+
+    <resultMap id="IdCardWithPersonResult2" type="Person" >
+        <id property="p_id" column="p_id" />
+        <result property="name" column="name" />
+        <result property="age" column="age" />
+        <result property="sex" column="sex" />
+        <association property="card" javaType="OneToOne.IdCard">
+            <id property="c_id" column="card_id" />
+            <result property="code" column="code" />
+        </association>
+    </resultMap>
+
+    <insert id="insertPerson" parameterType="Person">
+            insert into t_person(name,age,sex,card_id) values (#{name},#{age},#{sex},#{card.c_id})
+    </insert>
+
+    <delete id="delPersonByPid" parameterType="int">
+        delete from t_person where p_id=#{p_id}
+    </delete>
+
+    <select id="findPersonByPid3" parameterType="int" resultMap="IdCardWithPersonResult">
+        select * from t_person where p_id=#{p_id};
+    </select>
+
+    <select id="selectAllPerson" resultMap="IdCardWithPersonResult">
+         select * from t_person;
+    </select>
+
+    <update id="updatePerson" parameterType="Person" >
+        update t_person
+        <set>
+            <if test="name!=null and name!='' ">
+                 name=#{name}
+            </if>
+            <if test="age!=null and age!='' ">
+                 age=#{age}
+            </if>
+            <if test="sex!=null and sex!='' ">
+                 sex=#{sex}
+            </if>
+            <if test="card!=null and card!='' ">
+                card_id=#{card.c_id}
+            </if>
+        </set>
+        where p_id=#{p_id}
+    </update>
+
+    <select id="getPersonInfo" parameterType="int" resultMap="IdCardWithPersonResult">
+        select * from t_person where p_id=#{p_id}
+    </select>
+
+</mapper>

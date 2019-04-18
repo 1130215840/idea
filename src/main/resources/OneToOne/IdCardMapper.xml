@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IdCardMapper">
+
+    <select id="findCodeByCid" parameterType="int" resultType="OneToOne.IdCard">
+          select * from t_idcard where c_id = #{c_id}
+    </select>
+
+    <insert id="insertIdCard" parameterType="IdCard" >
+      <!--
+             将插入数据的主键获取，返回到idcard 对象中
+             keyProperty:将查询到的主键值设置到指定的 parameterType 对象的哪个属性
+      -->
+        <selectKey keyProperty="c_id" resultType="int" order="AFTER"  >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_idcard(code) values (#{code})
+    </insert>
+
+</mapper>

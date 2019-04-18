@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ForumMapper">
+
+    <insert id="insertForum" parameterType="MyBatis_bbs.Forum" >
+         insert into t_forum(forum_name) values (#{forum_name});
+    </insert>
+
+    <select id="getAllForum" parameterType="MyBatis_bbs.Forum">
+
+    </select>
+
+</mapper>
+
+
